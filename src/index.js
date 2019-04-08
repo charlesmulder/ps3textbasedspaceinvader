@@ -68,16 +68,16 @@ var ticking = false;
 PS.KEY_SPACEBAR = 32;
 
 function moveTorpedos(torpedoLocations) {
-    console.log(torpedoLocations);
+    //console.log(torpedoLocations);
     for(let index=0; index<torpedoLocations.length; index++) {
-        console.log('removing torpedo');
+        //console.log('removing torpedo');
         PS.glyph(torpedoLocations[index].x, torpedoLocations[index].y, "");
         if(torpedoLocations[index].y >= TOP_ROW+1) {
-            console.log('redraw torpedo');
+            //console.log('redraw torpedo');
             PS.glyph(torpedoLocations[index].x, torpedoLocations[index].y-1, TORPEDO);
         } else {
             torpedosInFlight--;
-            console.log('torpedos in flight after move', torpedosInFlight);
+            //console.log('torpedos in flight after move', torpedosInFlight);
         }
     }
     ticking = false;
@@ -85,26 +85,28 @@ function moveTorpedos(torpedoLocations) {
 }
 
 function tick() {
-    console.log('ticking', ticking);
+    //console.log('ticking', ticking);
     if( ! ticking) {
-        console.log('tick');
+        //console.log('tick');
         ticking = true;
         var torpedoLocations = [];
         for(let y=BOTTOM_ROW-1; y>=TOP_ROW; y--) {
             for(let x=0; x<RIGHT_ROW; x++) {
-                console.log(`checking ${x}, ${y}`, PS.glyph(x, y));
+                //console.log(`checking ${x}, ${y}`, PS.glyph(x, y));
                 if(PS.glyph(x, y) === TORPEDO) {
                     torpedoLocations.push({x:x, y:y});
-                    console.log('torpedo locations', torpedoLocations);
+                    //console.log('torpedo locations', torpedoLocations);
                     if(torpedoLocations.length === torpedosInFlight) {
                         moveTorpedos(torpedoLocations);
                         return;
                     }
                 }
+                if(y == TOP_ROW && x == (RIGHT_ROW-1)) {
+                    ticking = false;
+                }
             }
         }
     }
-    ticking = false;
     //window.requestAnimationFrame(tick);
 }
 
@@ -141,7 +143,7 @@ PS.touch = function( x, y, data, options ) {
 	// Uncomment the following code line
 	// to inspect x/y parameters:
 
-	 PS.debug( "PS.touch() @ " + x + ", " + y + "\n" );
+    //PS.debug( "PS.touch() @ " + x + ", " + y + "\n" );
 
 	// Add code here for mouse clicks/touches
 	// over a bead.
@@ -162,7 +164,7 @@ PS.release = function( x, y, data, options ) {
 
 	// Uncomment the following code line to inspect x/y parameters:
 
-	PS.debug( "PS.release() @ " + x + ", " + y + "\n" );
+    //PS.debug( "PS.release() @ " + x + ", " + y + "\n" );
 
 	// Add code here for when the mouse button/touch is released over a bead.
 }
@@ -210,7 +212,7 @@ PS.exit = function( x, y, data, options ) {
 
 	// Uncomment the following code line to inspect x/y parameters:
 
-	PS.debug( "PS.exit() @ " + x + ", " + y + "\n" );
+    //PS.debug( "PS.exit() @ " + x + ", " + y + "\n" );
 
 	// Add code here for when the mouse cursor/touch exits a bead.
 };
@@ -229,7 +231,7 @@ PS.exitGrid = function( options ) {
 
 	// Uncomment the following code line to verify operation:
 
-	PS.debug( "PS.exitGrid() called\n" );
+    //PS.debug( "PS.exitGrid() called\n" );
 
 	// Add code here for when the mouse cursor/touch moves off the grid.
 };
@@ -252,7 +254,7 @@ PS.keyDown = function( key, shift, ctrl, options ) {
 
 	// Uncomment the following code line to inspect first three parameters:
 
-	PS.debug( "PS.keyDown(): key=" + key + ", shift=" + shift + ", ctrl=" + ctrl + "\n" );
+    //PS.debug( "PS.keyDown(): key=" + key + ", shift=" + shift + ", ctrl=" + ctrl + "\n" );
     switch(key) {
         case PS.KEY_ARROW_LEFT:
             for(let x of _.range(0, GRID_WIDTH)) {
