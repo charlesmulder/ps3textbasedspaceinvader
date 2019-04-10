@@ -4,12 +4,17 @@
   "description": "",
   "main": "game.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "watch": "webpack -w --mode=development",
+    "build": "webpack --mode=production",
+    "test": "rollup src/*.test.js --file tests/bundle.js --format cjs && mocha tests"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "jslint": "^0.12.1"
+    "jslint": "^0.12.1",
+    "mocha": "^6.1.2",
+    "mocha-webpack": "^1.1.0",
+    "rollup": "^1.9.3"
   },
   "dependencies": {
     "lodash": "^4.17.11",
