@@ -13,12 +13,11 @@
   "devDependencies": {
     "jslint": "^0.12.1",
     "mocha": "^6.1.2",
-    "mocha-webpack": "^1.1.0",
-    "rollup": "^1.9.3"
-  },
-  "dependencies": {
-    "lodash": "^4.17.11",
+    "rollup": "^1.9.3",
     "webpack": "^4.29.6",
     "webpack-cli": "^3.3.0"
+  },
+  "dependencies": {
+    "lodash": "^4.17.11"
   }
 }
