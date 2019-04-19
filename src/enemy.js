@@ -3,6 +3,8 @@ import * as _ from "lodash"
 
 const crypto = require("crypto");
 
+const NUMBER_OF_ENEMIES = 5;
+
 const enemyship = {
     create: (x, y) => {
         return {
@@ -28,6 +30,7 @@ const enemyships = {
         });
         return coordinates;
     },
+
     /**
      * @return random coordinate
      **/
