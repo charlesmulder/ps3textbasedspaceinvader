@@ -1,6 +1,6 @@
 import * as _ from "lodash"
 
-import { enemyship } from './enemy';
+import { enemyships } from './enemy';
 import { torpedo }  from './torpedo';
 
 import { SHIP } from './ship';
@@ -11,10 +11,6 @@ const BOTTOM_ROW = GRID_HEIGHT-1;
 const TOP_ROW = 0;
 const RIGHT_ROW = GRID_WIDTH-1;
 const LEFT_ROW = 0;
-const TICKS = 10;
-var timer;
-var ticking = false;
-
 PS.KEY_SPACEBAR = 32;
 
 PS.init = function( system, options ) {
@@ -23,26 +19,16 @@ PS.init = function( system, options ) {
 	PS.gridSize( GRID_WIDTH, GRID_HEIGHT );
 
     PS.gridColor( 255, 256, 666 );
+    PS.border(PS.ALL, PS.ALL, 0);
 
     PS.glyph(Math.floor(GRID_WIDTH/2), GRID_HEIGHT-1, SHIP);
 
-    /*
-    const availCoordinates = enemyship.availCoordinates({
-        x: [LEFT_ROW, RIGHT_ROW],
-        y: [TOP_ROW, BOTTOM_ROW-5]
-    });
-    console.log('avail cords', availCoordinates);
-    enemyship.create( NUMBER_OF_ENEMIES, availCoordinates);
-    */
+    const availCoordinates = enemyships.availCoordinates( [LEFT_ROW+2, RIGHT_ROW-2], [TOP_ROW+2, BOTTOM_ROW-7] );
+    enemyships.army = enemyships.create(availCoordinates.length, availCoordinates);
+    enemyships.go();
 
-    PS.timerStart(TICKS, () => {
-        if( ! ticking) {
-            ticking = true;
-            torpedo.travel(() => {
-                ticking = false;
-            }, TOP_ROW+1);
-        }
-    });
+    torpedo.go();
+
 };
 
 

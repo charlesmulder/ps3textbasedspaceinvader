@@ -2,54 +2,78 @@
 var torpedosInFlight = 0;
 //const TORPEDO = 581; // 
 
-/**
- * TODO: will use less resources to keep track of torpedos in a data structure as they are created vs looping through all beads
- */
-const moveTorpedos = (torpedoLocations) => {
-    for(let index=0; index<torpedoLocations.length; index++) {
-        PS.glyph(torpedoLocations[index].x, torpedoLocations[index].y, "");
-        if(torpedoLocations[index].y >= TOP_ROW+1) {
-            PS.glyph(torpedoLocations[index].x, torpedoLocations[index].y-1, TORPEDO);
-        } else {
-            torpedosInFlight--;
-        }
-    }
-    ticking = false;
-}
-
 const torpedo = {
+    explosion: 88,
     sprite: 94,
 
     // max allowed torpedos
     max: 5,
+    ticks: 10,
+    timer: null,
+    ticking: false,
 
     /**
      * array of torpedos with coordinates
      * [{x: 1, y: 2}]
      */
-    map: [],
+    hail: [],
+
+    go: function() {
+        PS.timerStart(this.ticks, () => {
+            if( ! this.ticking) {
+                this.ticking = true;
+                this.travel(() => {
+                    this.ticking = false;
+                }, 1);
+            }
+        });
+    },
 
     allowed: function() {
-      return (this.map.length < this.max);
+      return (this.hail.length < this.max);
     },
 
     fire: function(x, y) {
-        PS.audioPlay( "fx_shoot3" );
+        //PS.audioPlay( "fx_shoot3" );
         PS.glyph(x, y, this.sprite);
-        this.map.push({x: x, y: y});
+        this.hail.push({x: x, y: y});
+    },
+
+    hit: function(x, y) {
+        console.log('hit!', x, y);
+        PS.glyph(x, y, this.explosion);
+        PS.glyphColor(x, y, PS.COLOR_RED);
+        setTimeout(() => {
+            PS.glyph(x, y, "");
+        }, 500, x, y);
+    },
+
+    move: function(x, y, index, sprite, color) {
+        PS.glyph(x, y, sprite);
+        PS.glyphColor(x, y, color);
+        this.hail.splice(index, 1, { // new torpedo position in hail of torpedos
+            x: x, 
+            y: y 
+        });
     },
 
     travel: function(callback, ceiling) {
-        this.map.forEach((torpedo, index) => {
+        this.hail.forEach((torpedo, index) => {
             PS.glyph(torpedo.x, torpedo.y, ""); // clear current position
-            if(torpedo.y >= ceiling) {
-                PS.glyph(torpedo.x, torpedo.y-1, this.sprite);
-                this.map.splice(index, 1, {
-                    x: torpedo.x, 
-                    y: torpedo.y-1 
-                });
-            } else {
-                this.map.splice(index, 1);
+            if(torpedo.y >= ceiling) { // torpedo on canvas
+                let above = PS.glyph(torpedo.x, torpedo.y-1);
+                if(above) { // bead above current torpedo is not empty
+                    if(above === this.explosion) { // is explostion
+                        this.move(torpedo.x, torpedo.y-1, index, this.explosion, PS.COLOR_RED);
+                    } else { // is enemy
+                        this.hit(torpedo.x, torpedo.y-1);
+                        this.hail.splice(index, 1);
+                    }
+                } else { // move torpedo
+                    this.move(torpedo.x, torpedo.y-1, index, this.sprite, PS.COLOR_BLACK);
+                }
+            } else { // torpedo off canvas, so remove from hail
+                this.hail.splice(index, 1);
             }
         });
         callback();

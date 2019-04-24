@@ -6,13 +6,14 @@
   "scripts": {
     "watch": "webpack -w --mode=development",
     "build": "webpack --mode=production",
-    "test": "rollup src/*.test.js --file tests/bundle.js --format cjs && mocha tests"
+    "test": "rollup src/*.test.js --dir tests --format cjs && mocha tests"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "faker": "^4.1.0",
     "jslint": "^0.12.1",
-    "mocha": "^6.1.2",
+    "mocha": "^6.1.4",
     "rollup": "^1.9.3",
     "webpack": "^4.29.6",
     "webpack-cli": "^3.3.0"
