@@ -26,8 +26,7 @@ const enemyships = {
         army.forEach(ship => PS.glyph(ship.x, ship.y, enemyship.sprite));
     },
     go: function() {
-        console.log(this.army);
-        /*
+        //console.log(this.army);
         PS.timerStart(this.ticks, () => {
             if( ! this.ticking) {
                 this.ticking = true;
@@ -36,7 +35,6 @@ const enemyships = {
                 });
             }
         });
-        */
     },
     /**
      * @callback points
@@ -44,17 +42,18 @@ const enemyships = {
     travel: function(callback) {
         this.army.forEach((enemy, index) => {
             PS.glyph(enemy.x, enemy.y, "");
-            this.move(enemy.id, enemy.x-1, enemy.y);
+            this.move(enemy.id, enemy.x-1, enemy.y, enemyship.sprite, index);
+            console.log(this.army);
             // move left until left most enemy hits edge 
             // then move down one
             // then move right until right most enemy hits edge
         });
         callback();
     },
-    move: function(id, x, y, index, sprite, color) {
+    move: function(id, x, y, sprite, index) {
         PS.glyph(x, y, sprite);
-        PS.glyphColor(x, y, color);
-        this.army.splice(index, 1, { // new torpedo position in hail of torpedos
+        this.army.splice(index, 1, { // new enemy position in army
+            id: id,
             x: x, 
             y: y 
         });

@@ -24,7 +24,9 @@ PS.init = function( system, options ) {
     PS.glyph(Math.floor(GRID_WIDTH/2), GRID_HEIGHT-1, SHIP);
 
     const availCoordinates = enemyships.availCoordinates( [LEFT_ROW+2, RIGHT_ROW-2], [TOP_ROW+2, BOTTOM_ROW-7] );
-    enemyships.army = enemyships.create(availCoordinates.length, availCoordinates);
+    //enemyships.army = enemyships.create(availCoordinates.length, availCoordinates);
+    enemyships.army = enemyships.create(1, availCoordinates);
+    enemyships.draw(enemyships.army);
     enemyships.go();
 
     torpedo.go();
